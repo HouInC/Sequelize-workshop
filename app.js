@@ -3,6 +3,8 @@ const nunjucks = require('nunjucks');
 const bodyparser = require('body-parser');
 const router = require('./routes/index.js');
 const app = express();
+const models = require('./models');
+
 var env=nunjucks.configure('view',{noCache : true});
 app.set('view engine','html');
 app.engine('html',nunjucks.render);
@@ -19,8 +21,9 @@ app.use(express.static("public"));
 
 //app.use(router);
 
-
-app.listen(3000,()=>{
-    console.log('server is running');
-})
-
+models.User.sync()
+.then( () => models.Page.sync() )
+.then( () => app.listen(3000,() => {
+    console.log('Server is running on port 3000!!')
+}))
+.catch( console.error );
