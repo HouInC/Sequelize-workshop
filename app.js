@@ -9,12 +9,13 @@ app.engine('html',nunjucks.render);
 
 
 
-
-
 app.use(function(req,res,next){
     console.log(req.method, res.statusCode, req.url);
     next();
 })
+app.use(express.static("public"));
+
+
 
 //app.use(router);
 
