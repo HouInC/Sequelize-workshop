@@ -1,0 +1,27 @@
+{
+  "name": "Sequelize-workshop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon -e html,js,css ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HouInC/Sequelize-workshop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HouInC/Sequelize-workshop/issues"
+  },
+  "homepage": "https://github.com/HouInC/Sequelize-workshop#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.15.4",
+    "nodemon": "^1.12.1",
+    "nunjucks": "^3.0.1"
+  }
+}
