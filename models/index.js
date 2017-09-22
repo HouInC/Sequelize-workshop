@@ -24,7 +24,10 @@ const Page = db.define('Page', {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
     }
-
+}, {
+    getterMethods:   {
+        getRoute() {return '/wiki/' + this.urlTitle;}
+    }
 })
 
 const User = db.define('User', {
