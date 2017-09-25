@@ -8,8 +8,9 @@ const Page = db.define('Page', {
     },
     urlTitle: {
         type: Sequelize.STRING,
+        allowNull: false,
         validate: {
-            allowNull: false,
+            // allowNull: false,
             isUrl: true
         }
     },
@@ -29,8 +30,13 @@ const Page = db.define('Page', {
         getRoute() {
             return '/wiki/' + this.urlTitle; // `/wiki/${this.urlTitle}`
         }
+    },
+    hooks:{
+        beforeCreate()
     }
 })
+
+
 
 const User = db.define('User', {
     name: {
@@ -40,8 +46,9 @@ const User = db.define('User', {
     email: {
         type: Sequelize.STRING,
         unique: true,
+        allowNull: false,
         validate: {
-            allowNull: false,
+            // allowNull: false,
             isEmail: true
         }
     }
