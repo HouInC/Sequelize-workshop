@@ -20,7 +20,7 @@ app.use(express.static("public"));
 app.use(router);
 
 
-models.User.sync({ force: true })
+models.User.sync({})
 .then( () => models.Page.sync() )
 .then( () => app.listen(3000,() => {
     console.log('Server is running on port 3000!!')

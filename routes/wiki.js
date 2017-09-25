@@ -11,10 +11,6 @@ router.get('/', function(req, res, next){
     res.render('index',{pages : Allpage})
   });
 
-
-//  res.send('abc');
-  //res.redirect('/')
-
 })
 
 router.post('/', function(req, res, next){
@@ -31,6 +27,7 @@ router.post('/', function(req, res, next){
     var page = Page.build({
       title: req.body.title,
       content: req.body.content
+      tags : req.body.tags.split(' ');
     });
 
     return page.save().then(function (page) {
@@ -50,21 +47,41 @@ router.get('/add', function(req, res, next){
 })
 
 router.get('/:urlTitle',function(req,res,next){
-  Page.findAll( {
-    where:{
-      urlTitle: req.params.urlTitle
+  // let findPage;
+  // Page.findAll( {
+  //   where:{
+  //     urlTitle: req.params.urlTitle
+  //   }})
+  // .then(foundPage=>{
+  //   findPage=foundPage;
+  //   console.log(findPage[0].authorId);
+  //   return User.findById(findPage[0].authorId);
+  // }).then(user=>{
+  //   //console.log(user);
+  //   res.render('wikipage',{page:findPage[0] , user:user});
+  // }).catch(next);
+  
+  Page.findOne({
+    where: {
+        urlTitle: req.params.urlTitle
+    },
+    include: [
+        {model: User, as: 'author'}
+    ]
+})
+.then(function (page) {
+    // page instance will have a .author property
+    // as a filled in user object ({ name, email })
+    if (page === null) {
+        res.status(404).send();
+    } else {
+        res.render('wikipage', {
+            page: page
+        });
     }
-  }).then(foundPage=>{
-    if(foundPage.length){
-      console.log(foundPage[0].dataValues);
-      res.render('wikipage',{page: foundPage[0].dataValues});
-      next();
-    }else{
-      res.redirect('/');
-    }
-  }).catch(next);
-  //res.json(page);
-  // res.send('hit dynamic route at '+req.params.urlTitle);
+})
+.catch(next);
+
 })
 
 
