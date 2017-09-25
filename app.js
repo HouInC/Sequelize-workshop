@@ -16,10 +16,7 @@ app.use(function(req,res,next){
     next();
 })
 app.use(express.static("public"));
-
-
-
-//app.use(router);
+app.use(router);
 
 models.User.sync()
 .then( () => models.Page.sync() )

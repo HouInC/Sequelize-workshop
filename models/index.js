@@ -26,7 +26,9 @@ const Page = db.define('Page', {
     }
 }, {
     getterMethods:   {
-        getRoute() {return '/wiki/' + this.urlTitle;}
+        getRoute() {
+            return '/wiki/' + this.urlTitle; // `/wiki/${this.urlTitle}`
+        }
     }
 })
 
