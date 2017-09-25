@@ -33,18 +33,13 @@ const Page = db.define('Page', {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
     }
-}, {
+}, 
+    {
     getterMethods:   {
         getRoute() {
             return '/wiki/' + this.urlTitle; // `/wiki/${this.urlTitle}`
         }
     },
-    // setterMethods: {
-    //     setUrlTitle(val){
-    //         this.setDataValue('urlTitle',val);
-    //     }
-    // }
-    // ,
      hooks:{
          beforeValidate(page){
             const urlTitle = generateUrlTitle(page.title);

@@ -18,28 +18,23 @@ router.get('/', function(req, res, next){
 })
 
 router.post('/', function(req, res, next){
-  const title = req.body.title;
-  const name = req.body.full_name
-  const email = req.body.email
-  const content = req.body.content
-  const status = req.body.status
-  let id;
-  User.findOrCreate({where:{
-    name :name,
-    email:email
-  }}).then(array=>{
-    var page=Page.build({
-      authorid : array.id,
-      title: title,
-      content: content
-    })
-    return page;
-  }).then(page=>{
-    console.log(page);
-    return page.save()
-  }).then(savedPage=>{
-    res.redirect(savedPage.getRoute);
-   }).catch(next);
+
+  User.findOrCreate({
+    where:{
+    name : req.body.full_name,
+    email: req.body.email
+  }}).then(function(values){
+    var user = values[0];
+    var page = Page.build({
+      title : req.body.title,
+      content:req.body.content
+    });
+
+    return page.save().then(page=> {
+      console.log(page);
+    });
+  }).then(page=>res.redirect(page.getRoute)
+  ).catch(next);
 })
 
 router.get('/add', function(req, res, next){
