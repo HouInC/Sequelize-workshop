@@ -4,22 +4,16 @@ var models = require('../models')
 var Page = models.Page
 var User = models.User
 
-module.exports = router
 
-function generateUrlTitle (title) {
-  if (title) {
-    // Removes all non-alphanumeric characters from title
-    // And make whitespace underscore
-    return title.replace(/\s+/g, '_').replace(/\W/g, '');
-  } else {
-    // Generates random 5 letter string
-    return Math.random().toString(36).substring(2, 7);
-  }
-}
 
 router.get('/', function(req, res, next){
-  console.log('wiki get is up')
-  res.redirect('/')
+  Page.findAll().then(Allpage=>{
+    res.render('index',{pages : Allpage})
+  });
+
+
+//  res.send('abc');
+  //res.redirect('/')
 
 })
 
@@ -29,24 +23,51 @@ router.post('/', function(req, res, next){
   const email = req.body.email
   const content = req.body.content
   const status = req.body.status
-
-  var urlTitle = generateUrlTitle(title)
-  console.log(urlTitle)
-
-
-  var page = Page.build({
-    title: title,
-    content: content,
-    urlTitle: urlTitle
-  })
-   page.save()
-
-  // res.json(req.body)
-  res.redirect('/')
-
+  let id;
+  User.findOrCreate({where:{
+    name :name,
+    email:email
+  }}).then(array=>{
+    var page=Page.build({
+      authorid : array.id,
+      title: title,
+      content: content
+    })
+    return page;
+  }).then(page=>{
+    console.log(page);
+    return page.save()
+  }).then(savedPage=>{
+    res.redirect(savedPage.getRoute);
+   }).catch(next);
 })
 
 router.get('/add', function(req, res, next){
   res.render('addpage')
 
 })
+
+router.get('/:urlTitle',function(req,res,next){
+  Page.findAll( {
+    where:{
+      urlTitle: req.params.urlTitle
+    }
+  }).then(foundPage=>{
+    if(foundPage.length){
+      console.log(foundPage[0].dataValues);
+      res.render('wikipage',{page: foundPage[0].dataValues});
+      next();
+    }else{
+      res.redirect('/');
+    }
+    
+  }).catch(next);
+  //res.json(page);
+  // res.send('hit dynamic route at '+req.params.urlTitle);
+})
+
+
+
+
+
+module.exports = router
